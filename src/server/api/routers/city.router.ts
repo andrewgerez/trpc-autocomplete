@@ -74,29 +74,4 @@ export const cityRouter = createTRPCRouter({
         });
       }
     }),
-
-  byId: publicProcedure.input(idSchema).query(async ({ input }) => {
-    try {
-      const city = await prisma.city.findUnique({
-        where: { id: input.id },
-      });
-
-      if (!city) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "City not found",
-        });
-      }
-
-      return city;
-    } catch (error) {
-      if (error instanceof TRPCError) throw error;
-
-      throw new TRPCError({
-        code: "INTERNAL_SERVER_ERROR",
-        message: "Failed to fetch city",
-        cause: error,
-      });
-    }
-  }),
 });
