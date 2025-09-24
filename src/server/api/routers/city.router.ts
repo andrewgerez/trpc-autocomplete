@@ -52,6 +52,7 @@ export const cityRouter = createTRPCRouter({
 
         return results;
       } catch (error) {
+        console.error(error);
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Search failed",
