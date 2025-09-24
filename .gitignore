@@ -4,6 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
+*lock.json
 
 # testing
 /coverage
@@ -12,6 +13,7 @@
 /prisma/db.sqlite
 /prisma/db.sqlite-journal
 db.sqlite
+mysql_data
 
 # next.js
 /.next/

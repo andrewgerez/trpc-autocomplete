@@ -1,20 +1,25 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-generator client {
-    provider = "prisma-client-js"
-}
-
 datasource db {
-    provider = "mysql"
-    url      = env("DATABASE_URL")
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+generator client {
+  provider = "prisma-client-js"
+}
 
-    @@index([name])
+model City {
+  id         BigInt   @id              @map("id")
+  city       String                    @map("city")
+  cityAscii  String                    @map("city_ascii")
+  latitude   Float                     @map("lat")
+  longitude  Float                     @map("lng")
+  country    String                    @map("country")
+  iso2       String                    @map("iso2")
+  iso3       String                    @map("iso3")
+  adminName  String                    @map("admin_name")
+  capital    String?                   @map("capital")
+  population BigInt                    @map("population")
 }

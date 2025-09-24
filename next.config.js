@@ -17,6 +17,24 @@ const config = {
     locales: ["en"],
     defaultLocale: "en",
   },
+  poweredByHeader: false,
+  compress: true,
+  async headers() {
+    return [
+      {
+        source: "/api/trpc/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "no-cache, no-store, must-revalidate",
+          },
+        ],
+      },
+    ];
+  },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
+  },
 };
 
 export default config;

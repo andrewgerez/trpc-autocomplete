@@ -6,6 +6,10 @@
   "scripts": {
     "build": "next build",
     "check": "next lint && tsc --noEmit",
+    "docker:reset": "docker-compose down && docker volume prune -f && rm -rf ./mysql_data",
+    "docker:setup": "docker-compose down && docker-compose up -d db && echo ⏳ Waiting for MySQL to start... && sleep 20 && docker-compose up -d && echo ⏳ Waiting for application to start... && sleep 10",
+    "docker:prisma": "docker exec trpc-sample-app-1 npx prisma generate && docker exec trpc-sample-app-1 npx prisma db push && docker exec trpc-sample-app-1 npx prisma db seed",
+    "docker:full": "npm run docker:setup && npm run docker:prisma && echo ✅ Project running at http://localhost:3000",
     "db:generate": "prisma migrate dev",
     "db:migrate": "prisma migrate deploy",
     "db:push": "prisma db push",
@@ -20,14 +24,18 @@
     "start": "next start",
     "typecheck": "tsc --noEmit"
   },
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
   "dependencies": {
-    "@prisma/client": "^6.5.0",
+    "@prisma/client": "^6.16.2",
     "@t3-oss/env-nextjs": "^0.12.0",
     "@tanstack/react-query": "^5.69.0",
     "@trpc/client": "^11.0.0",
     "@trpc/next": "^11.0.0",
     "@trpc/react-query": "^11.0.0",
     "@trpc/server": "^11.0.0",
+    "csv-parse": "^6.1.0",
     "next": "^15.2.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -36,13 +44,13 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
-    "@types/node": "^20.14.10",
+    "@types/node": "^20.19.17",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "eslint": "^9.23.0",
     "eslint-config-next": "^15.2.3",
     "prettier": "^3.5.3",
-    "prisma": "^6.5.0",
+    "prisma": "^6.16.2",
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.27.0"
   },
