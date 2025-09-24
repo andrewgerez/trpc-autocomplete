@@ -17,40 +17,46 @@ export const cityRouter = createTRPCRouter({
     .query(async ({ input }) => {
       const query = input.query.trim().toLowerCase();
 
-      if (query.length < 2) {
-        return [];
+      if (query.length < 2) return [];
+
+      try {
+        const results = await prisma.city.findMany({
+          where: {
+            OR: [
+              {
+                city: {
+                  contains: query,
+                  mode: "insensitive",
+                },
+              },
+              {
+                cityAscii: {
+                  contains: query,
+                  mode: "insensitive",
+                },
+              },
+            ],
+          },
+          select: {
+            id: true,
+            city: true,
+            country: true,
+            adminName: true,
+            population: true,
+            latitude: true,
+            longitude: true,
+          },
+          take: 10,
+          orderBy: [{ population: "desc" }, { city: "asc" }],
+        });
+
+        return results;
+      } catch (error) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Search failed",
+          cause: error,
+        });
       }
-
-      const results = await prisma.city.findMany({
-        where: {
-          OR: [
-            {
-              city: {
-                contains: query,
-                mode: "insensitive",
-              },
-            },
-            {
-              cityAscii: {
-                contains: query,
-                mode: "insensitive",
-              },
-            },
-          ],
-        },
-        select: {
-          id: true,
-          city: true,
-          country: true,
-          adminName: true,
-          population: true,
-          latitude: true,
-          longitude: true,
-        },
-        take: 10,
-        orderBy: [{ population: "desc" }, { city: "asc" }],
-      });
-
-      return results;
     }),
 });
