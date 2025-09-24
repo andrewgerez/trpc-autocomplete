@@ -11,21 +11,6 @@ const autocompleteSchema = z.object({
     .regex(/^[a-zA-ZÀ-ÿ\s\-'\.]+$/, "Invalid characters"),
 });
 
-const idSchema = z.object({
-  id: z.union([
-    z.bigint().positive("Invalid ID"),
-    z.number().int().positive("Invalid ID"),
-    z
-      .string()
-      .regex(/^\d+$/, "Invalid ID format")
-      .transform((val) => {
-        const bigIntVal = BigInt(val);
-        if (bigIntVal <= 0) throw new Error("Invalid ID");
-        return bigIntVal;
-      }),
-  ]),
-});
-
 export const cityRouter = createTRPCRouter({
   autocomplete: publicProcedure
     .input(autocompleteSchema)
